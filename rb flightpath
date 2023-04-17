@@ -1,0 +1,322 @@
+import math
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import rc
+import matplotlib as mpl
+from sklearn.metrics import r2_score
+from sklearn.metrics import mean_squared_error
+import statistics
+import matplotlib.colors as colors
+import matplotlib as mpl
+import matplotlib.font_manager as font_manager
+import random
+
+plt.style.use('default')
+mpl.rcParams['font.family']='serif'
+cmfont = font_manager.FontProperties(fname=mpl.get_data_path() + '/fonts/ttf/cmr10.ttf')
+mpl.rcParams['font.serif']=cmfont.get_name()
+mpl.rcParams['mathtext.fontset']='cm'
+mpl.rcParams['axes.unicode_minus']=False
+mpl.rcParams['axes.linewidth'] = 1
+
+
+view_penner = False
+#data
+data1 = pd.read_csv("~/Desktop/Technical Project/Data/ResultsAstro.csv")
+HVI1 = data1['HorizontalVelIn']
+VVI1 = data1['VerticalVelIn']
+SI1 = data1['SpinIn']
+HVO1 = data1['HorizontalVelOut']
+VVO1 = data1['VerticalVelOut']
+SO1 = data1['SpinOut']
+n1 = len(data1)
+
+data2 = pd.read_csv("~/Desktop/Technical Project/Data/ResultsCourse.csv")
+HVI2 = data2['HorizontalVelIn']
+VVI2 = data2['VerticalVelIn']
+SI2 = data2['SpinIn']
+HVO2 = data2['HorizontalVelOut']
+VVO2 = data2['VerticalVelOut']
+SO2 = data2['SpinOut']
+n2 = len(data2)
+
+if view_penner == True:
+    r = 0.0202
+    output_x_velocities1 = []
+    output_y_velocities1 = []
+    output_a_velocities1 = []
+    for i in range(0, n1):
+        mu = 0.225
+        #inputs
+        ix = HVI1[i]
+        iy = VVI1[i]
+        iw = SI1[i]
+        vel = (math.sqrt(ix**2 + iy**2))
+        vel_dir = math.atan(abs(ix/iy))
+
+        ang = 15.4 * (vel / 18.6)  * (math.degrees(vel_dir) / 44.4)
+    
+        theta = math.radians(abs(ang))
+        ixdash = (ix * math.cos(theta)) - (abs(iy) * math.sin(theta))
+        iydash = (ix * math.sin(theta)) + (abs(iy) * math.cos(theta))
+        
+        if abs(iy) <= 20:
+            e = 0.510 - (0.0375 * abs(iydash)) + (0.000903 * abs(iydash) * abs(iydash))
+        else:
+            e = 0.120        
+        #slip/roll
+        mu_c = (2*(ixdash + (r*iw)))/(7*(1+e)*(iydash))  
+        if mu <= mu_c: #bounce
+            rxdash = ixdash - ((mu * abs(iydash))*(1+e))
+            rydash = e * abs(iydash)
+            rw = iw - (((5*mu)/(2*r))*(abs(iydash))*(1+e))
+        else: #roll
+            rxdash = ((5/7)*ixdash) - ((2/7)*r*iw)
+            rydash = e*abs(iydash)
+            rw = -rxdash/r
+        
+        #output
+        rx = (rxdash * math.cos(theta)) - (rydash * math.sin(theta))
+        ry = (rxdash * math.sin(theta)) + (rydash * math.cos(theta))
+        output_x_velocities1.append(rx)
+        output_y_velocities1.append(ry)
+        output_a_velocities1.append(rw)
+        
+    output_x_velocities2 = []
+    output_y_velocities2 = []
+    output_a_velocities2 = []
+    for i in range(0, n2):
+        #inputs
+        mu = 0.298
+        ix = HVI2[i]
+        iy = VVI2[i]
+        iw = SI2[i]
+        vel = (math.sqrt(ix**2 + iy**2))
+        vel_dir = math.atan(abs(ix/iy))
+        
+        ang = 15.4 * (vel / 18.6)  * (math.degrees(vel_dir) / 44.4)
+        ang = abs(ang)
+        theta = math.radians(ang)
+        ixdash = (ix * math.cos(theta)) - (abs(iy) * math.sin(theta))
+        iydash = (ix * math.sin(theta)) + (abs(iy) * math.cos(theta))
+        
+        if abs(iy) <= 20:
+            e = 0.510 - (0.0375 * abs(iydash)) + (0.000903 * abs(iydash) * abs(iydash))
+        else:
+            e = 0.120   
+
+        #slip/roll
+        mu_c = (2*(ixdash + (r*iw)))/(7*(1+e)*(iydash))  
+        if mu <= mu_c: #bounce
+            rxdash = ixdash - ((mu * abs(iydash))*(1+e))
+            rydash = e * abs(iydash)
+            rw = iw - (((5*mu)/(2*r))*(abs(iydash))*(1+e))
+        else: #roll
+            rxdash = ((5/7)*ixdash) - ((2/7)*r*iw)
+            rydash = e*abs(iydash)
+            rw = -rxdash/r
+        
+        #output
+        rx = (rxdash * math.cos(theta)) - (rydash * math.sin(theta))
+        ry = (rxdash * math.sin(theta)) + (rydash * math.cos(theta))
+        output_x_velocities2.append(rx)
+        output_y_velocities2.append(ry)
+        output_a_velocities2.append(rw)
+
+else:
+    output_x_velocities1 = []
+    output_y_velocities1 = []
+    output_a_velocities1 = []
+    r = 0.0202
+    for i in range(0, n1):
+        #inputs
+        ix = HVI1[i]
+        iy = VVI1[i]
+        iw = SI1[i]
+        vel = (math.sqrt((HVI1[i]*HVI1[i]) + (VVI1[i]*VVI1[i])))
+        vel_dir = math.atan(VVI1[i]/HVI1[i])
+        theta = 0.29847*vel_dir + 0.51888
+        e = -0.3328*vel_dir+ 0.09744
+        mu = 0.171
+        #convert
+        ixdash = (ix * math.cos(theta)) - (abs(iy) * math.sin(theta))
+        iydash = (ix * math.sin(theta)) + (abs(iy) * math.cos(theta))
+    
+            
+    
+        #slip/roll
+        mu_c = (2*(ixdash + (r*iw)))/(7*(1+e)*(iydash))  
+        if mu <= mu_c: #bounce
+            rxdash = ixdash - ((mu * abs(iydash))*(1+e))
+            rydash = e * abs(iydash)
+            rw = iw - (((5*mu)/(2*r))*(abs(iydash))*(1+e))
+        else: #roll
+            rxdash = ((5/7)*ixdash) - ((2/7)*r*iw)
+            rydash = e*abs(iydash)
+            rw = -rxdash/r
+        
+        #output
+        rx = (rxdash * math.cos(theta)) - (rydash * math.sin(theta))
+        ry = (rxdash * math.sin(theta)) + (rydash * math.cos(theta))
+        output_x_velocities1.append(rx)
+        output_y_velocities1.append(ry)
+        output_a_velocities1.append(rw)
+    
+    
+    #COURSE
+    #setup
+    output_x_velocities2 = []
+    output_y_velocities2 = []
+    output_a_velocities2 = []
+    r = 0.0202
+    for i in range(0, n2):
+        #inputs
+        ix = HVI2[i]
+        iy = VVI2[i]
+        iw = SI2[i]
+        vel = (math.sqrt((HVI2[i]*HVI2[i]) + (VVI2[i]*VVI2[i])))
+        vel_dir = math.atan(VVI2[i]/HVI2[i])
+        
+        
+        theta = 0.01560*ix + 0.05221
+        mu = 0.293
+        e = -0.0092*ix + 0.30953
+        
+        #convert
+        ixdash = (ix * math.cos(theta)) - (abs(iy) * math.sin(theta))
+        iydash = (ix * math.sin(theta)) + (abs(iy) * math.cos(theta))
+        
+    
+        #slip/roll
+        mu_c = (2*(ixdash + (r*iw)))/(7*(1+e)*(iydash))  
+        if mu <= mu_c: #bounce
+            rxdash = ixdash - ((mu * abs(iydash))*(1+e))
+            rydash = e * abs(iydash)
+            rw = iw - (((5*mu)/(2*r))*(abs(iydash))*(1+e))
+        else: #roll
+            rxdash = ((5/7)*ixdash) - ((2/7)*r*iw)
+            rydash = e*abs(iydash)
+            rw = -rxdash/r
+        
+        #output
+        rx = (rxdash * math.cos(theta)) - (rydash * math.sin(theta))
+        ry = (rxdash * math.sin(theta)) + (rydash * math.cos(theta))
+        output_x_velocities2.append(rx)
+        output_y_velocities2.append(ry)
+        output_a_velocities2.append(rw)
+        
+        
+cmap = mpl.cm.get_cmap('viridis')
+c1 = cmap(0)
+c2 = cmap(0.25)
+c3 = cmap(0.5)
+c4 = cmap(0.75)
+c5 = cmap(0.99)
+
+
+
+def traj_r(ix, iy):
+    sx = []
+    sy = []
+    time = np.linspace(0, 3, 10000)
+    for t in time: 
+        sy.append((iy*t) + (0.5 * -9.81 * t * t))
+        sx.append(ix*t)
+        if sy[-1] < 0:
+            break
+    return sx, sy
+
+idxs1 = random.sample(range(0, n1-1), 5) #random subset of 3
+idxs2 = random.sample(range(0, n2-1), 5) #random subset of 3
+idxs1 = [50, 136, 151, 292, 146]
+idxs2 = [200, 100, 300, 270, 291, 420]
+
+c1traj1_x, c1traj1_y = traj_r(HVO1[idxs1[0]], VVO1[idxs1[0]])
+c1traj2_x, c1traj2_y = traj_r(HVO1[idxs1[1]], VVO1[idxs1[1]])
+c1traj3_x, c1traj3_y = traj_r(HVO1[idxs1[2]], VVO1[idxs1[2]])
+c1traj4_x, c1traj4_y = traj_r(HVO1[idxs1[3]], VVO1[idxs1[3]])
+c1traj5_x, c1traj5_y = traj_r(HVO1[idxs1[4]], VVO1[idxs1[4]])
+
+c1traj1_x_pred, c1traj1_y_pred = traj_r(output_x_velocities1[idxs1[0]], output_y_velocities1[idxs1[0]])
+c1traj2_x_pred, c1traj2_y_pred = traj_r(output_x_velocities1[idxs1[1]], output_y_velocities1[idxs1[1]])
+c1traj3_x_pred, c1traj3_y_pred = traj_r(output_x_velocities1[idxs1[2]], output_y_velocities1[idxs1[2]])
+c1traj4_x_pred, c1traj4_y_pred = traj_r(output_x_velocities1[idxs1[3]], output_y_velocities1[idxs1[3]])
+c1traj5_x_pred, c1traj5_y_pred = traj_r(output_x_velocities1[idxs1[4]], output_y_velocities1[idxs1[4]])
+
+c2traj1_x, c2traj1_y = traj_r(HVO2[idxs2[0]], VVO2[idxs2[0]])
+c2traj2_x, c2traj2_y = traj_r(HVO2[idxs2[1]], VVO2[idxs2[1]])
+c2traj3_x, c2traj3_y = traj_r(HVO2[idxs2[2]], VVO2[idxs2[2]])
+c2traj4_x, c2traj4_y = traj_r(HVO2[idxs2[3]], VVO2[idxs2[3]])
+c2traj5_x, c2traj5_y = traj_r(HVO2[idxs2[4]], VVO2[idxs2[4]])
+
+c2traj1_x_pred, c2traj1_y_pred = traj_r(output_x_velocities2[idxs2[0]], output_y_velocities2[idxs2[0]])
+c2traj2_x_pred, c2traj2_y_pred = traj_r(output_x_velocities2[idxs2[1]], output_y_velocities2[idxs2[1]])
+c2traj3_x_pred, c2traj3_y_pred = traj_r(output_x_velocities2[idxs2[2]], output_y_velocities2[idxs2[2]])
+c2traj4_x_pred, c2traj4_y_pred = traj_r(output_x_velocities2[idxs2[3]], output_y_velocities2[idxs2[3]])
+c2traj5_x_pred, c2traj5_y_pred = traj_r(output_x_velocities2[idxs2[4]], output_y_velocities2[idxs2[4]])
+
+c1s1 = (str(abs((output_a_velocities1[idxs1[0]])-(SO1[idxs1[0]]))))[:5]
+c1s2 = (str(abs((output_a_velocities1[idxs1[1]])-(SO1[idxs1[1]]))))[:5]
+c1s3 = (str(abs((output_a_velocities1[idxs1[2]])-(SO1[idxs1[2]]))))[:5]
+c1s4 = (str(abs((output_a_velocities1[idxs1[3]])-(SO1[idxs1[3]]))))[:5]
+c1s5 = (str(abs((output_a_velocities1[idxs1[4]])-(SO1[idxs1[4]]))))[:5]
+
+c2s1 = (str(abs((output_a_velocities2[idxs2[0]])-(SO2[idxs2[0]]))))[:5]
+c2s2 = (str(abs((output_a_velocities2[idxs2[1]])-(SO2[idxs2[1]]))))[:5]
+c2s3 = (str(abs((output_a_velocities2[idxs2[2]])-(SO2[idxs2[2]]))))[:5]
+c2s4 = (str(abs((output_a_velocities2[idxs2[3]])-(SO2[idxs2[3]]))))[:5]
+c2s5 = (str(abs((output_a_velocities2[idxs2[4]])-(SO2[idxs2[4]]))))[:5]
+
+
+
+
+
+fig, axs = plt.subplots(1,2,figsize=(15, 15))
+line_width = 5
+line_width_pred = 4
+alpha_pred = 0.5
+ls_pred = "-"
+label_size = 20
+tick_size = 15
+axs[0].set_xlim(-1, 3)
+axs[0].set_ylim(0, 4)
+axs[0].plot(c1traj1_x, c1traj1_y, color = c1, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c1s1)
+axs[0].plot(c1traj2_x, c1traj2_y, color = c2, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c1s2)
+axs[0].plot(c1traj3_x, c1traj3_y, color = c3, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c1s3)
+axs[0].plot(c1traj4_x, c1traj4_y, color = c4, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c1s4)
+axs[0].plot(c1traj5_x, c1traj5_y, color = c5, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c1s5)
+axs[0].plot(c1traj1_x_pred, c1traj1_y_pred, color = c1, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[0].plot(c1traj2_x_pred, c1traj2_y_pred, color = c2, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[0].plot(c1traj3_x_pred, c1traj3_y_pred, color = c3, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[0].plot(c1traj4_x_pred, c1traj4_y_pred, color = c4, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[0].plot(c1traj5_x_pred, c1traj5_y_pred, color = c5, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[0].legend(loc = "upper left")
+axs[0].set_ylabel("Vertical Displacement "+r"$(m)$", fontsize = label_size)
+axs[0].set_xlabel("Horizontal Displacement "+r"$(m)$", fontsize = label_size)
+axs[0].set_xticks([-1, 0, 1, 2, 3])
+axs[0].set_yticks([0, 1, 2, 3, 4])
+axs[0].set_title(r"$(a)$", fontsize = 25)
+axs[0].tick_params(axis='both', which='major', labelsize=tick_size)
+axs[0].set_box_aspect(1)
+
+axs[1].set_xlim(-1, 3)
+axs[1].set_ylim(0, 4)
+axs[1].plot(c2traj1_x, c2traj1_y, color = c1, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c2s1)
+axs[1].plot(c2traj2_x, c2traj2_y, color = c2, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c2s2)
+axs[1].plot(c2traj3_x, c2traj3_y, color = c3, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c2s3)
+axs[1].plot(c2traj4_x, c2traj4_y, color = c4, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c2s4)
+axs[1].plot(c2traj5_x, c2traj5_y, color = c5, lw = line_width, label = r'$|\omega_{out}-\hat{\omega}_{out}|$ = '+c2s5)
+axs[1].plot(c2traj1_x_pred, c2traj1_y_pred, color = c1, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[1].plot(c2traj2_x_pred, c2traj2_y_pred, color = c2, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[1].plot(c2traj3_x_pred, c2traj3_y_pred, color = c3, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[1].plot(c2traj4_x_pred, c2traj4_y_pred, color = c4, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[1].plot(c2traj5_x_pred, c2traj5_y_pred, color = c5, lw = line_width_pred, alpha = alpha_pred, ls = ls_pred)
+axs[1].legend(loc = "upper left")
+axs[1].set_ylabel("Vertical Displacement "+r"$(m)$", fontsize = label_size)
+axs[1].set_xlabel("Horizontal Displacement "+r"$(m)$", fontsize = label_size)
+axs[1].set_xticks([-1, 0, 1, 2, 3])
+axs[1].set_yticks([0, 1, 2, 3, 4])
+axs[1].set_title(r"$(b)$", fontsize = 25)
+axs[1].tick_params(axis='both', which='major', labelsize=tick_size)
+axs[1].set_box_aspect(1)
