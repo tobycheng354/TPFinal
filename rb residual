@@ -17,10 +17,10 @@ cmfont = font_manager.FontProperties(fname=mpl.get_data_path() + '/fonts/ttf/cmr
 mpl.rcParams['font.serif']=cmfont.get_name()
 mpl.rcParams['mathtext.fontset']='cm'
 mpl.rcParams['axes.unicode_minus']=False
-mpl.rcParams['axes.linewidth'] = 1.5
+mpl.rcParams['axes.linewidth'] = 1
 
 
-view_penner = True
+view_penner = False
 #data
 data1 = pd.read_csv("~/Desktop/Technical Project/Data/ResultsAstro.csv")
 HVI1 = data1['HorizontalVelIn']
@@ -235,14 +235,14 @@ a2, la2, ca2 = line_of_best_fit(SO2,output_a_velocities2, min_val_a, max_val_a)
 
 
 #PLOT PARAMS
-lwidth1 = 4
+lwidth1 = 3
 lwidth2 = 2
 tick_size = 13
 lab_size = 18
 title_size = 24
 cmap = mpl.cm.get_cmap('viridis')
-c2 = cmap(0.7)
-c1 = cmap(0.3)
+c2 = cmap(0.75)
+c1 = cmap(0.25)
 c3 = "black"
 
 
