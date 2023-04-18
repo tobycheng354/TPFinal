@@ -44,7 +44,7 @@ view_haake = True
 #parameters
 t = np.linspace(0, 0.01, 1001)
 r = 0.0202                                          
-I = -0.0006 #minus to flip the reaction force
+I = -0.0005 #minus to flip the reaction force
 L = 0.008
 tol = 0.001
 mu = 0.2
