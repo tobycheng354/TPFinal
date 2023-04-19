@@ -240,21 +240,20 @@ lwidth2 = 2
 tick_size = 13
 lab_size = 18
 title_size = 24
-cmap = mpl.cm.get_cmap('viridis')
-c2 = cmap(0.75)
-c1 = cmap(0.25)
+c1 = "tab:blue"
+c2 = "tab:orange"
 c3 = "black"
 
 
 #PLOT
 fig, axs = plt.subplots(1,3,figsize=(15, 15))
-axs[0].plot(np.arange(-5, 26), np.arange(-5, 26), "-", color = c3, linewidth = lwidth2, label = "Perfect Model")
+axs[0].plot(np.arange(-5, 26), np.arange(-5, 26), "--", color = c3, linewidth = lwidth2, label = "Perfect Model")
 axs[0].scatter(HVO1, output_x_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[0].scatter(HVO2, output_x_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker = ".", s = 100)
 axs[0].plot(x1, lx1, "-", color = c1, linewidth = lwidth1, label = "Astro")
 axs[0].plot(x2, lx2, "-", color = c2, linewidth = lwidth1, label = "Course")
-axs[0].set_xlabel("Predictions "+r"$(m\;s^{-1})$", fontsize = lab_size)
-axs[0].set_ylabel("True Value "+r"$(m\;s^{-1})$", fontsize = lab_size)
+axs[0].set_ylabel("Predictions "+r"$(m\;s^{-1})$", fontsize = lab_size)
+axs[0].set_xlabel("True Value "+r"$(m\;s^{-1})$", fontsize = lab_size)
 axs[0].set_box_aspect(1)
 axs[0].tick_params(axis='both', which='major', labelsize=tick_size)
 axs[0].legend()
@@ -264,13 +263,13 @@ axs[0].set_yticks([-5, 0, 5, 10, 15, 20, 25])
 axs[0].set_xlim([-5, 25])
 axs[0].set_ylim([-5, 25])
 
-axs[1].plot(np.arange(0,26), np.arange(0,26), "-", color = c3, linewidth = lwidth2)
+axs[1].plot(np.arange(0,26), np.arange(0,26), "--", color = c3, linewidth = lwidth2)
 axs[1].scatter(VVO1, output_y_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[1].scatter(VVO2, output_y_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker =".", s = 100)
 axs[1].plot(y1, ly1, "-", color = c1, linewidth = lwidth1)
 axs[1].plot(y2, ly2, "-", color = c2, linewidth = lwidth1)
-axs[1].set_xlabel("Predictions "+r"$(m\;s^{-1})$", fontsize = lab_size)
-axs[1].set_ylabel("True Value "+r"$(m\;s^{-1})$", fontsize = lab_size)
+axs[1].set_ylabel("Predictions "+r"$(m\;s^{-1})$", fontsize = lab_size)
+axs[1].set_xlabel("True Value "+r"$(m\;s^{-1})$", fontsize = lab_size)
 axs[1].set_box_aspect(1)
 axs[1].tick_params(axis='both', which='major', labelsize=tick_size)
 axs[1].set_title(r"$\dot{y}_{out}$", fontsize = title_size)
@@ -279,13 +278,13 @@ axs[1].set_yticks([0, 5, 10, 15, 20, 25])
 axs[1].set_xlim([0, 25])
 axs[1].set_ylim([0, 25])
 
-axs[2].plot(np.arange(-1200, 1000), np.arange(-1200, 1000), "-", color = c3, linewidth = lwidth2)
+axs[2].plot(np.arange(-1200, 1000), np.arange(-1200, 1000), "--", color = c3, linewidth = lwidth2)
 axs[2].scatter(SO1, output_a_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[2].scatter(SO2, output_a_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker =".", s = 100)
 axs[2].plot(a1, la1, "-", color = c1, linewidth = lwidth1)
 axs[2].plot(a2, la2, "-", color = c2, linewidth = lwidth1)
-axs[2].set_xlabel("Predictions "+r"($rad\;s^{-1})$", fontsize = lab_size)
-axs[2].set_ylabel("True Value "+r"($rad\;s^{-1})$", fontsize = lab_size)
+axs[2].set_ylabel("Predictions "+r"($rad\;s^{-1})$", fontsize = lab_size)
+axs[2].set_xlabel("True Value "+r"($rad\;s^{-1})$", fontsize = lab_size)
 axs[2].set_box_aspect(1)
 axs[2].tick_params(axis='both', which='major', labelsize=tick_size)
 axs[2].tick_params(axis="y", which='major', rotation = 90)
