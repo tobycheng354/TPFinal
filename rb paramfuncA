@@ -83,7 +83,7 @@ for i in SI_asc:
 
 
 label_size = 13
-font_size = 20
+font_size = 16
 lwidth = 3
 #plots
 fig, axs = plt.subplots(1,3,figsize=(15, 15))
