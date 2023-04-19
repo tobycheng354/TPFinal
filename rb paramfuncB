@@ -93,7 +93,7 @@ def runges(num_poly, lwidth):
 
 
 label_size = 13
-font_size = 20
+font_size = 16
 
 lwidth = 3
 #plots
