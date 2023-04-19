@@ -40,35 +40,37 @@ VVO2 = data2['VerticalVelOut']
 SO2 = data2['SpinOut']
 n2 = len(data2)
 
-view_haake = True
+view_haake = False
 #parameters
-t = np.linspace(0, 0.01, 1001)
+t = np.linspace(0, 0.03, 1001)
 r = 0.0202                                          
 I = -0.0005 #minus to flip the reaction force
 L = 0.008
 tol = 0.001
-mu = 0.2
+C2_a = 10e5
+C2_b = 10e5
 CFx = 0
 
 if view_haake == True:
     K1_a = 0.5*10e9
     C1_a = 0.2*10e6
-    C2_a = 10e5  
+    mu_a = 0.2  
     K1_b = 1*10e9
     C1_b = 0.5*10e6
-    C2_b = 10e5 
+    mu_b = 0.5
     
 else:#optimized values
-    K1_a = 10e9
-    C1_a = 0.5*10e6
-    C2_a = 10e5  
-    K1_b = 10e9
-    C1_b = 0.5*10e6
-    C2_b = 10e5   
+    K1_a = 1736842105
+    C1_a = 1473684
+    mu_a = 0.1947
+    K1_b = 39473686421
+    C1_b = 2421052
+    mu_b = 0.190
 
 
 #odes
 def ode_s1_a(t, g):
+    mu = mu_a
     x = g[0]
     y = g[1]
     a = g[2]
@@ -95,6 +97,7 @@ def ode_s1_a(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s2_a(t, g):
+    mu = mu_a
     x = g[0]
     y = g[1]
     a = g[2]
@@ -130,6 +133,7 @@ def ode_s2_a(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s3_a(t, g):
+    mu = mu_a
     x = g[0]
     y = g[1]
     a = g[2]
@@ -156,6 +160,7 @@ def ode_s3_a(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s4_a(t, g):
+    mu = mu_a
     x = g[0]
     y = g[1]
     a = g[2]
@@ -178,6 +183,7 @@ def ode_s4_a(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s1_b(t, g):
+    mu = mu_b
     x = g[0]
     y = g[1]
     a = g[2]
@@ -204,6 +210,7 @@ def ode_s1_b(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s2_b(t, g):
+    mu = mu_b
     x = g[0]
     y = g[1]
     a = g[2]
@@ -239,6 +246,7 @@ def ode_s2_b(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s3_b(t, g):
+    mu = mu_b
     x = g[0]
     y = g[1]
     a = g[2]
@@ -265,6 +273,7 @@ def ode_s3_b(t, g):
     return(dx, dy, da, dx2, dy2, da2)
 
 def ode_s4_b(t, g):
+    mu = mu_b
     x = g[0]
     y = g[1]
     a = g[2]
