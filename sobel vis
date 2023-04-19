@@ -1,0 +1,94 @@
+import matplotlib.pyplot as plt
+from matplotlib.legend_handler import HandlerTuple
+import matplotlib.font_manager as font_manager
+import numpy as np
+import matplotlib as mpl
+
+#data from SD_sobel
+kxT = 0.900593
+c1xT = 0.001985
+c2xT = 0.001
+LxT = 0.016471
+muxT = 0.059591
+
+kx1 = 0.901623
+c1x1 = 0.001
+c2x1 = 0.001
+Lx1 = 0.019182
+mux1 = 0.059591
+
+kyT = 0.246506
+c1yT = 0.729334
+c2yT = 0.001
+LyT = 0.011925
+muyT = 0.012287
+
+ky1 = 0.242320
+c1y1 = 0.730817
+c2y1 = 0.002272
+Ly1 = 0.011845
+muy1 = 0.012076
+
+kaT = 0.01718
+c1aT = 0.030855
+c2aT = 0.001
+LaT = 0.001
+muaT = 0.9800087
+
+ka1 = 0.018010
+c1a1 = 0.036351
+c2a1 = 0.001
+La1 = 0.001
+mua1 = 0.9744369
+
+x1 = [kx1, c1x1, c2x1, Lx1, mux1]
+xT = [kxT, c1xT, c2xT, LxT, muxT]
+
+y1 = [ky1, c1y1, c2y1, Ly1, muy1]
+yT = [kyT, c1yT, c2yT, LyT, muyT]
+
+a1 = [ka1, c1a1, c2a1, La1, mua1]
+aT = [kaT, c1aT, c2aT, LaT, muaT]
+
+title_size = 20
+label_size = 15
+tick_size = 15
+shift = 0.15
+w = 0.15
+color = []
+cmap = mpl.cm.get_cmap('viridis')
+c1 = cmap(0.01)
+c2 = cmap(0.25)
+c3 = cmap(0.5)
+c4 = cmap(0.75)
+c5 = cmap(0.99)
+colors = [c1, c2, c3, c4, c5]
+
+fig, axs = plt.subplots(1,2,figsize=(15, 15))
+axs[0].bar([0-2*shift, 0-shift, 0, 0+shift, 0+2*shift], x1, width = w, color = colors, label = ["K1", "C1", "C2","L", r"$\mu$"])
+axs[0].bar([1-2*shift, 1-shift, 1, 1+shift, 1+2*shift], y1, width = w, color = colors)
+axs[0].bar([2-2*shift, 2-shift, 2, 2+shift, 2+2*shift], a1, width = w, color = colors)
+axs[0].set_xticks([0, 1, 2])
+axs[0].set_xticklabels([r"$\dot{x}$", r"$\dot{y}$", r"$\omega$"])
+axs[0].set_xlabel("Output Variable", fontsize = label_size)
+axs[0].set_ylabel("First Order Sobel Index", fontsize = label_size)
+axs[0].axvline(0.5, ls = "--", color = "black")
+axs[0].axvline(1.5, ls = "--", color = "black")
+axs[0].set_box_aspect(1)
+axs[0].legend()
+axs[0].tick_params(axis='both', which='major', labelsize=tick_size)
+axs[0].set_title(r"$(a)$", fontsize = title_size)
+
+axs[1].bar([0-2*shift, 0-shift, 0, 0+shift, 0+2*shift], xT, width = w, color = colors)
+axs[1].bar([1-2*shift, 1-shift, 1, 1+shift, 1+2*shift], yT, width = w, color = colors)
+axs[1].bar([2-2*shift, 2-shift, 2, 2+shift, 2+2*shift], aT, width = w, color = colors)
+axs[1].set_xticks([0, 1, 2])
+axs[1].set_xlabel("Output Variable", fontsize = label_size)
+axs[1].set_ylabel("Total Order Sobel Index", fontsize = label_size)
+axs[1].axvline(0.5, ls = "--", color = "black")
+axs[1].axvline(1.5, ls = "--", color = "black")
+axs[1].set_xticklabels([r"$\dot{x}$", r"$\dot{y}$", r"$\omega$"])
+axs[1].set_box_aspect(1)
+axs[1].tick_params(axis='both', which='major', labelsize=tick_size)
+axs[1].set_title(r"$(b)$", fontsize = title_size)
+
