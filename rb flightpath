@@ -276,7 +276,7 @@ fig, axs = plt.subplots(1,2,figsize=(15, 15))
 line_width = 5
 line_width_pred = 4
 alpha_pred = 0.5
-ls_pred = "-"
+ls_pred = "--"
 label_size = 20
 tick_size = 15
 axs[0].set_xlim(-1, 3)
