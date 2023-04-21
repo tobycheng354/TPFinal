@@ -40,6 +40,7 @@ VVO2 = data2['VerticalVelOut']
 SO2 = data2['SpinOut']
 n2 = len(data2)
 
+
 view_haake = False
 #parameters
 t = np.linspace(0, 0.03, 1001)
@@ -58,14 +59,14 @@ if view_haake == True:
     K1_b = 1*10e9
     C1_b = 0.5*10e6
     mu_b = 0.5
-    
-else:#optimized values
-    K1_a = 1736842105
-    C1_a = 1473684
-    mu_a = 0.1947
-    K1_b = 39473686421
-    C1_b = 2421052
-    mu_b = 0.190
+
+else:#for x y
+    K1_a = 3333333333
+    C1_a = 2000000
+    mu_a = 0.3 
+    K1_b = 1000000000
+    C1_b = 2000000
+    mu_b = 0.4
 
 
 #odes
@@ -617,14 +618,14 @@ tick_size = 13
 lab_size = 18
 title_size = 24
 cmap = mpl.cm.get_cmap('viridis')
-c2 = cmap(0.75)
-c1 = cmap(0.25)
+c2 = "tab:orange"
+c1 = "tab:blue"
 c3 = "black"
 
 
 #PLOT
 fig, axs = plt.subplots(1,3,figsize=(15, 15))
-axs[0].plot(np.arange(-5, 26), np.arange(-5, 26), "-", color = c3, linewidth = lwidth2, label = "Perfect Model")
+axs[0].plot(np.arange(-5, 26), np.arange(-5, 26), "--", color = c3, linewidth = lwidth2, label = "Perfect Model")
 axs[0].scatter(HVO1, output_x_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[0].scatter(HVO2, output_x_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker = ".", s = 100)
 axs[0].plot(x1, lx1, "-", color = c1, linewidth = lwidth1, label = "Astro")
@@ -640,7 +641,7 @@ axs[0].set_yticks([-5, 0, 5, 10, 15, 20, 25])
 axs[0].set_xlim([-5, 25])
 axs[0].set_ylim([-5, 25])
 
-axs[1].plot(np.arange(0,26), np.arange(0,26), "-", color = c3, linewidth = lwidth2)
+axs[1].plot(np.arange(0,26), np.arange(0,26), "--", color = c3, linewidth = lwidth2)
 axs[1].scatter(VVO1, output_y_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[1].scatter(VVO2, output_y_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker =".", s = 100)
 axs[1].plot(y1, ly1, "-", color = c1, linewidth = lwidth1)
@@ -655,7 +656,7 @@ axs[1].set_yticks([0, 5, 10, 15, 20, 25])
 axs[1].set_xlim([0, 25])
 axs[1].set_ylim([0, 25])
 
-axs[2].plot(np.arange(-1200, 1000), np.arange(-1200, 1000), "-", color = c3, linewidth = lwidth2)
+axs[2].plot(np.arange(-1200, 1000), np.arange(-1200, 1000), "--", color = c3, linewidth = lwidth2)
 axs[2].scatter(SO1, output_a_velocities1, alpha = 0.4, color = c1, edgecolor = 'none', marker =".", s = 100)
 axs[2].scatter(SO2, output_a_velocities2, alpha = 0.4, color = c2, edgecolor = 'none', marker =".", s = 100)
 axs[2].plot(a1, la1, "-", color = c1, linewidth = lwidth1)
